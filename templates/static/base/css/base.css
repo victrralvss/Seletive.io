@@ -1,0 +1,22 @@
+*{
+    font-family:'Quicksand', sans-serif;
+}
+
+body{
+    background-color: #373737 !important;
+}
+
+nav{
+    padding: 20px;
+}
+
+.bg-nav{
+    background-color: #005c6c !important;
+    padding: 10px;
+}
+
+.navbar-brand{
+    font-weight: 300;
+    letter-spacing: 3px;
+    font-size: 1.5rem  !important;
+}
