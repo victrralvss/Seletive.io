@@ -18,7 +18,7 @@ class Empresa(models.Model):
     )
     logo = models.ImageField(upload_to="logo_empresa", null=True)
     nome = models.CharField(max_length=30)
-    email = models.EmailField()
+    email = models.EmailField(null=True)
     cidade = models.CharField(max_length=30)
     endereco = models.CharField(max_length=30)
     caracteristicas_empresa = models.TextField()
@@ -27,6 +27,9 @@ class Empresa(models.Model):
 
     def __str__(self):
         return self.nome
+
+    def qtd_vagas(self):
+        return Vagas.objects.filter(empresa__id = self.id).count()
 
 
 class Vagas(models.Model):
@@ -48,6 +51,7 @@ class Vagas(models.Model):
     titulo = models.CharField(max_length=30)
     nivel_experiencia = models.CharField(max_length=2, choices=choices_experiencia)
     data_final =  models.DateField()
+    email = models.EmailField(null=True)
     status = models.CharField(max_length=30, choices=choices_status)
     tecnologias_dominadas = models.ManyToManyField(Tecnologias)
     tecnologias_etudar = models.ManyToManyField(Tecnologias, related_name="estudar")

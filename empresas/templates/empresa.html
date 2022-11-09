@@ -23,7 +23,7 @@
             <div class="borda-box"></div>
             <div class="body-box">
             
-                <form>
+                <form action="{% url 'empresa'%}" method="GET">{% csrf_token %}
                 <div class="row">
                     
                         <div class="col-md-5">
@@ -32,7 +32,9 @@
 
                         <div class="col-md-4">
                             <select class="form-select" name="tecnologias">
-                                <option value="">--------</option>
+                                {% for tech in tecnologias %}
+                                    <option value="{{tech.id}}">{{tech}}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     
@@ -54,7 +56,7 @@
 
                     {% for empresa in empresas %}
                         <tr class="tabela-linha" >
-                            <td>{{empresa.nome}}</td>
+                            <td><a style="text-decoration: none; color: #005c6c" href="{% url 'pagina_empresa' empresa.id %}">{{empresa.nome}}</a></td>
                             <td>{{empresa.endereco}}</td>
                             <td>
                                 
@@ -63,10 +65,15 @@
                                         <option value="{{tecnologia}}">{{tech}}</option>  
                                     {% endfor %}                   
                                 </select>
-                                                                  
+                                                                
                             </td>
                             <td>
-                                Quantidade de vagas
+                                {% if empresa.qtd_vagas > 0 %}
+                                    <img src="{% static 'empresa/img/verificado.png' %}">
+                                {% else %}
+                                    <img src="{% static 'empresa/img/cancelar.png' %}">
+                                {% endif %}
+                                {{empresa.qtd_vagas}}
                             </td>
                             <td>
                                 <a class="btn-excluir" href="{% url 'excluir_empresa' empresa.id %}">Excluir empresa</a>

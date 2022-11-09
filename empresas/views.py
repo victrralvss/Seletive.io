@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import Tecnologias, Empresa 
+from .models import Tecnologias, Empresa, Vagas
 from django.contrib import messages
 from django.contrib.messages import constants, DEFAULT_TAGS
 # Create your views here.
@@ -55,9 +55,18 @@ def nova_empresa(request):
         return redirect('/home/nova_empresa')
 
        
-def empresa(request):
+def empresas(request):
     empresas = Empresa.objects.all()
     tecnologias = Tecnologias.objects.all()
+    tecnologias_filtro = request.GET.get('tecnologias')
+    nome_filtro = request.GET.get('nome')
+
+    if tecnologias_filtro:
+        empresas = empresas.filter(tecnologias=tecnologias_filtro)
+
+    if nome_filtro:
+        empresas = empresas.filter(nome__icontains=nome_filtro)
+
     return render(request, 'empresa.html', {'empresas': empresas, 'tecnologias': tecnologias})
 
 def excluir_empresa(request, id):
@@ -67,3 +76,11 @@ def excluir_empresa(request, id):
     messages.add_message(request, constants.SUCCESS, 'Empresa deletada com sucesso!')
     
     return redirect('/home/empresas')
+
+
+def pagina_empresa(request, id):
+    empresa_unica= get_object_or_404(Empresa, id=id)
+    empresas = Empresa.objects.all()
+    tecnologis = Tecnologias.objects.all()
+    vagas = Vagas.objects.filter(empresa_id=id)
+    return render(request, 'pagina_empresa.html', {'empresa': empresa_unica, 'tecnologias': tecnologis, 'empresas': empresas,'vagas': vagas})
