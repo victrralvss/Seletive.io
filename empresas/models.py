@@ -47,7 +47,7 @@ class Vagas(models.Model):
         ('F', 'Finalizado')
     )
 
-    empresa = models.ForeignKey(Empresa, null=True, on_delete=models.SET_NULL)
+    empresa = models.ForeignKey(Empresa, null=True, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=30)
     nivel_experiencia = models.CharField(max_length=2, choices=choices_experiencia)
     data_final =  models.DateField()
@@ -56,5 +56,13 @@ class Vagas(models.Model):
     tecnologias_dominadas = models.ManyToManyField(Tecnologias)
     tecnologias_etudar = models.ManyToManyField(Tecnologias, related_name="estudar")
 
+    def progresso(self):
+        status_progress = [((i+1) * 20, j[0]) for i, j in enumerate(self.choices_status)]
+        status_progress = list(filter(lambda status_progress: status_progress[1] == self.status, status_progress))[0][0]
+
+        return status_progress
+
     def __str__(self):
          return self.titulo
+
+
